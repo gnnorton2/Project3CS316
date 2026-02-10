@@ -13,18 +13,55 @@ public class EchoClient {
         // the other side uses accept to accept this port
         try(Socket socket = new Socket(serverIP, serverPort)){
             System.out.println("Connected to the server...");
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataInputStream keyboard = new DataInputStream(System.in);
+            while (true) {
+                //new code for project, while loop on both sides
+                System.out.println("Enter command: (l)ist, (d)elete, (r)ename, do(w)nload, (u)pload, (q)uit\n");
+                String command = keyboard.readLine();
+                String[] parts = command.split(" ");
+                String commandTwo = parts[0];
+                if (command.toUpperCase().equals("Q")) {
+                    out.writeUTF("Q");
+                    out.flush();
+                    System.out.println("...Quitting...");
+                    break;
+                }
+                else if (command.toUpperCase().equals("L")) {
+                    out.writeUTF("L");
+                    String line;
+                    while ((line = in.readUTF()) != null && !line.equals("...End...")) {
+                        System.out.println(line);
+                    }
+                }
+                else if (command.toUpperCase().equals("U")) {
+                    System.out.println("Enter the file name to upload:\n");
+                    String fileName = keyboard.readLine();
+                    //System.out.println("Looking for file at: " + new File("clientFiles", fileName).getAbsolutePath());
+                    File file = new File("clientFiles", fileName);
+                    if (!file.exists()) {
+                        System.out.println("File upload failed (does not exist)\n");
+                        return;
+                    }
+                    out.writeUTF("U");
+                    out.writeUTF(file.getName());
+                    out.writeLong(file.length());
 
-            //new code for project, while loop on both sides
-            System.out.println("Enter command: (l)ist, (d)elete, (r)ename, do(w)nload, (u)pload, (q)uit\n");
-            String command = keyboard.readLine();
+                    FileInputStream fis = new FileInputStream(file);
 
-            out.println(command);
-            //tell the server client is done sending
-            //this is the special signal
-            socket.shutdownOutput();
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = fis.read(buffer)) > 0) {
+                        out.write(buffer, 0, bytesRead);
+                    }
+
+                    out.flush();
+                    fis.close();
+                    }
+
+            }
 
             String line;
             while ((line = in.readLine()) != null) {
@@ -33,18 +70,6 @@ public class EchoClient {
                 }
                 System.out.println(line);
             }
-
-            //file is hardcoded, later will use a scanner to choose the files
-            File myFolder = new File("clientFiles");
-            if(!myFolder.exists()) {
-                myFolder.mkdirs();
-            }
-
-            File myFile = new File(myFolder, command);
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-
-
         }
     }
 }

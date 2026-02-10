@@ -16,23 +16,44 @@ public class EchoServer {
                 Socket clientSocket = mySocket.accept();
 
                 System.out.println("Client connected: " + clientSocket.getInetAddress()); //
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                DataInputStream in = new DataInputStream(clientSocket.getInputStream());
+                DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
                 String command;
 
-                while ((command = in.readLine()) != null) {
+                while (true) {
+                    command = in.readUTF();
                     if (command.toUpperCase().equals("L")) {
                         File folder = new File("serverFiles");
                         File [] files = folder.listFiles();
 
                         if (files != null) {
                             for (File f : files) {
-                                out.println(f.getName());
+                                out.writeUTF(f.getName());
                             }
                         }
-                        out.println("...End...");
+                        out.writeUTF("...End...");
                     }
                     // add delete, rename, download, upload, and quit here
+                    if (command.toUpperCase().equals("U")) {
+                        String fileName = in.readUTF();
+                        long fileSize = in.readLong();
+
+                        FileOutputStream fos = new FileOutputStream("serverFiles/" + fileName);
+                        //InputStream socketIn = clientSocket.getInputStream();
+
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        long totalRead = 0;
+
+                        while (totalRead < fileSize) {
+                            bytesRead = in.read(buffer);
+                            fos.write(buffer, 0, bytesRead);
+                            totalRead += bytesRead;
+                        }
+                        fos.close();
+                        System.out.println("Upload complete: " + fileName);
+
+                    }
                 }
             }
         } //end try
