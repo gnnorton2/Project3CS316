@@ -56,15 +56,46 @@ public class EchoClient {
                     while ((bytesRead = fis.read(buffer)) > 0) {
                         out.write(buffer, 0, bytesRead);
                     }
+                    File fileCheck = new File("serverFiles", fileName);
+                    if (fileCheck.exists()) {
+                        System.out.printf("%s has been uploaded\n", fileName);
+                    }
+                    else {
+                        System.out.println("File check has failed: no upload");
+                    }
 
                     out.flush();
                     fis.close();
                     }
+                else if (command.toUpperCase().equals("W")) {
+                    System.out.println("Enter the file name to download:\n");
+                    String fileName = keyboard.readLine();
 
+                    File file = new File("serverFiles", fileName);
+                    if (!file.exists()) {
+                        System.out.println("File download failed (does not exist)\n");
+                        return;
+                    }
+
+                    out.writeUTF("W");
+                    out.writeUTF(file.getName());
+                    out.writeLong(file.length());
+
+                    FileInputStream fis = new FileInputStream(file);
+
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = fis.read(buffer)) > 0) {
+                        out.write(buffer, 0, bytesRead);
+                    }
+                    System.out.printf("%s has been downloaded\n", fileName);
+                    out.flush();
+                    fis.close();
+                }
             }
-
             String line;
-            while ((line = in.readLine()) != null) {
+            while ((line = in.readUTF()) != null) {
                 if (line.equals("...End...")) {
                     break;
                 }
