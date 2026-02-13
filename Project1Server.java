@@ -27,7 +27,7 @@ public class Project1Server {
                         continue;
                     }
                     if (command.toUpperCase().equals("L")) {
-                        File folder = new File("serverFiles");
+                        File folder = new File("ServerFiles");
                         File [] files = folder.listFiles();
 
                         if (files != null) {
@@ -42,7 +42,7 @@ public class Project1Server {
                         String fileName = in.readUTF();
                         long fileSize = in.readLong();
 
-                        FileOutputStream fos = new FileOutputStream("serverFiles/" + fileName);
+                        FileOutputStream fos = new FileOutputStream("ServerFiles/" + fileName);
                         //InputStream socketIn = clientSocket.getInputStream();
 
                         byte[] buffer = new byte[1024];
@@ -62,7 +62,7 @@ public class Project1Server {
                         String fileName = in.readUTF();
                         long fileSize = in.readLong();
 
-                        FileOutputStream fos = new FileOutputStream("clientFiles/" + fileName);
+                        FileOutputStream fos = new FileOutputStream("ClientFiles/" + fileName);
                         //InputStream socketIn = clientSocket.getInputStream();
 
                         byte[] buffer = new byte[1024];

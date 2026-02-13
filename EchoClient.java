@@ -39,7 +39,7 @@ public class EchoClient {
                     System.out.println("Enter the file name to upload:\n");
                     String fileName = keyboard.readLine();
                     //System.out.println("Looking for file at: " + new File("clientFiles", fileName).getAbsolutePath());
-                    File file = new File("clientFiles", fileName);
+                    File file = new File("ClientFiles", fileName);
                     if (!file.exists()) {
                         System.out.println("File upload failed (does not exist)\n");
                         return;
@@ -56,7 +56,7 @@ public class EchoClient {
                     while ((bytesRead = fis.read(buffer)) > 0) {
                         out.write(buffer, 0, bytesRead);
                     }
-                    File fileCheck = new File("serverFiles", fileName);
+                    File fileCheck = new File("ServerFiles", fileName);
                     if (fileCheck.exists()) {
                         System.out.printf("%s has been uploaded\n", fileName);
                     }
@@ -71,7 +71,7 @@ public class EchoClient {
                     System.out.println("Enter the file name to download:\n");
                     String fileName = keyboard.readLine();
 
-                    File file = new File("serverFiles", fileName);
+                    File file = new File("ServerFiles", fileName);
                     if (!file.exists()) {
                         System.out.println("File download failed (does not exist)\n");
                         return;
