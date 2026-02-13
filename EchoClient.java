@@ -85,8 +85,8 @@ public class EchoClient {
                     while ((bytesRead = fis.read(buffer)) > 0) {
                         out.write(buffer, 0, bytesRead);
                     }
-                    File fileCheck = new File("ServerFiles", fileName);
-                    if (fileCheck.exists()) {
+                    String status = in.readUTF();
+                    if (status.equals("S")) {
                         System.out.printf("%s has been uploaded\n", fileName);
                     }
                     else {

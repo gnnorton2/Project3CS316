@@ -74,7 +74,8 @@ public class EchoServer {
                         }
                         fos.close();
                         System.out.println("Upload complete: " + fileName);
-
+                        out.writeUTF("S");
+                        out.flush();
                     }
                     else if (command.toUpperCase().equals("W")) {
                         String fileName = in.readUTF();
