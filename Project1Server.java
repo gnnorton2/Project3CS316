@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class EchoServer {
+public class Project1Server {
     public static void main(String[] args) throws Exception {
         //server port
         int port = 3000;
