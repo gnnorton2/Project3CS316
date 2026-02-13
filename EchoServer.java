@@ -43,7 +43,19 @@ public class EchoServer {
                         }
                         out.flush();
                     }
-                    // add delete, rename, download, upload, and quit here
+                    else if (command.equalsIgnoreCase("R")){
+                        String oldName = in.readUTF();
+                        String newName = in.readUTF();
+                        File oldFile = new File("ServerFiles", oldName);
+                        File newFile = new File("ServerFiles", newName);
+                        if(oldFile.exists() && oldFile.renameTo(newFile)){
+                            out.writeUTF("S");
+                        } else {
+                            out.writeUTF("F");
+                        }
+                        out.flush();
+                    }
+                    // add rename, download, upload, and quit here
                     if (command.toUpperCase().equals("U")) {
                         String fileName = in.readUTF();
                         long fileSize = in.readLong();

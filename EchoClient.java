@@ -41,6 +41,22 @@ public class EchoClient {
                         System.out.println("Delete failed.");
                     }
                 }
+                else if (command.equalsIgnoreCase("R")){
+                    System.out.println("Enter current file name: ");
+                    String oldName = keyboard.readLine();
+                    System.out.println("Enter new file name: ");
+                    String newName = keyboard.readLine();
+                    out.writeUTF("R");
+                    out.writeUTF(oldName);
+                    out.writeUTF(newName);
+                    out.flush();
+                    String status = in.readUTF();
+                    if(status.equals("S")){
+                        System.out.println("Rename successful.");
+                    } else {
+                        System.out.println("Rename failed.");
+                    }
+                }
                 else if (command.toUpperCase().equals("L")) {
                     out.writeUTF("L");
                     String line;
