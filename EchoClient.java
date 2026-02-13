@@ -28,6 +28,19 @@ public class EchoClient {
                     System.out.println("...Quitting...");
                     break;
                 }
+                else if(command.equalsIgnoreCase("D")){
+                    System.out.println("Enter file name to delete: ");
+                    String fileName = keyboard.readLine();
+                    out.writeUTF("D");
+                    out.writeUTF(fileName);
+                    out.flush();
+                    String status = in.readUTF();
+                    if(status.equals("S")){
+                        System.out.println("File deleted successfully.");
+                    } else {
+                        System.out.println("Delete failed.");
+                    }
+                }
                 else if (command.toUpperCase().equals("L")) {
                     out.writeUTF("L");
                     String line;

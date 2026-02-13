@@ -33,6 +33,16 @@ public class EchoServer {
                         }
                         out.writeUTF("...End...");
                     }
+                    else if (command.equalsIgnoreCase("D")){
+                        String fileName = in.readUTF();
+                        File file = new File("ServerFiles", fileName);
+                        if(file.exists() && file.delete()){
+                            out.writeUTF("S"); //success
+                        } else {
+                            out.writeUTF("F"); //failure
+                        }
+                        out.flush();
+                    }
                     // add delete, rename, download, upload, and quit here
                     if (command.toUpperCase().equals("U")) {
                         String fileName = in.readUTF();
