@@ -55,14 +55,12 @@ public class EchoServer {
                         }
                         out.flush();
                     }
-                    // add rename, download, upload, and quit here
-                    if (command.toUpperCase().equals("U")) {
+                    else if (command.toUpperCase().equals("U")) {
                         String fileName = in.readUTF();
                         long fileSize = in.readLong();
 
                         FileOutputStream fos = new FileOutputStream("ServerFiles/" + fileName);
                         //InputStream socketIn = clientSocket.getInputStream();
-
                         byte[] buffer = new byte[1024];
                         int bytesRead;
                         long totalRead = 0;
