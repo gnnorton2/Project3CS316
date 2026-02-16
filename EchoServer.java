@@ -55,7 +55,7 @@ public class EchoServer {
                         }
                         out.flush();
                     }
-                    else if (command.toUpperCase().equals("U")) {
+                    else if (command.equalsIgnoreCase("U")) {
                         String fileName = in.readUTF();
                         long fileSize = in.readLong();
 
@@ -93,6 +93,10 @@ public class EchoServer {
                         fis.close();
                         out.flush();
                         System.out.println("Download complete: " + fileName);
+                    }
+                    else if (command.equalsIgnoreCase("Q")) {
+                        System.out.println("Client disconnected.");
+                        break;
                     }
                 }
             }
