@@ -77,21 +77,21 @@ public class EchoServer {
                     }
                     else if (command.toUpperCase().equals("W")) {
                         String fileName = in.readUTF();
-                        long fileSize = in.readLong();
-
-                        FileOutputStream fos = new FileOutputStream("ClientFiles/" + fileName);
-                        //InputStream socketIn = clientSocket.getInputStream();
-
+                        File file = new File("ServerFiles", fileName);
+                        if (!file.exists()) {
+                            out.writeLong(-1);
+                            out.flush();
+                            continue;
+                        }
+                        out.writeLong(file.length());
+                        FileInputStream fis = new FileInputStream(file);
                         byte[] buffer = new byte[1024];
                         int bytesRead;
-                        long totalRead = 0;
-
-                        while (totalRead < fileSize) {
-                            bytesRead = in.read(buffer);
-                            fos.write(buffer, 0, bytesRead);
-                            totalRead += bytesRead;
+                        while ((bytesRead = fis.read(buffer)) > 0) {
+                            out.write(buffer, 0, bytesRead);
                         }
-                        fos.close();
+                        fis.close();
+                        out.flush();
                         System.out.println("Download complete: " + fileName);
                     }
                 }
