@@ -71,7 +71,7 @@ public class EchoClient {
                     File file = new File("ClientFiles", fileName);
                     if (!file.exists()) {
                         System.out.println("File upload failed (does not exist)\n");
-                        return;
+                        continue;
                     }
                     out.writeUTF("U");
                     out.writeUTF(file.getName());
